@@ -1,6 +1,6 @@
 #Step4: Extract Promoter/Terminator sequence
 
-The follow codes does the following:
+The code does the following:
   1. Remove genes with overlapping annotations with neighboring genes
   2. Extract Promoter/Terminator sequence
   3. Remove Promoter/Terminators containing BbsI or BsaI cut sites

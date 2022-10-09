@@ -1,4 +1,4 @@
-#Step2: Find the top 3% stable gene by CV from Tissue data, Make Figure1
+#Step2: Find the top 3% stable gene by CV from Tissue data
 
 Input:
   1. Data/MoR_Stats_Tissue.csv generated from Step1
