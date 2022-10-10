@@ -15,7 +15,7 @@ Input:
 
 Output:
   1. ../Figures/Figure2.svg
-  2. ../Figures/Figure5D.svg
+  2. ../Figures/Figure4D.svg
   3. ../Figures/SupplementalFigure4.svg
   4. ../../Pipeline/Data/Tobacco_Significance.csv (This is used to plot SupplementalFigure2)
 
@@ -494,7 +494,7 @@ ggplot() +
   scale_y_continuous(breaks = seq(0,3, by = 0.2))+
   ylab("Fold Change from Unrepressed Control")
 
-ggsave("../Figures/Figure5D.svg", plot = last_plot(), width = 8.4, height = 6, units = "cm", dpi = 600, scale = 3)
+ggsave("../Figures/Figure4D.svg", plot = last_plot(), width = 8.4, height = 6, units = "cm", dpi = 600, scale = 3)
 ```
 
 Regular plotting for supplement: 

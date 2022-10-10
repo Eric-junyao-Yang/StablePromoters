@@ -42,7 +42,7 @@ There are three sub-folders:
   
   Generates outputs to "/Figures", including:
   1. Figure2
-  2. Figure5D
+  2. Figure4D
   3. SupplementalFigure4
 
 Detailed methods can be found in the manuscript.
