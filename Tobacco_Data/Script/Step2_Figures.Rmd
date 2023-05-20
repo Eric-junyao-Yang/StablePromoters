@@ -4,7 +4,7 @@ author: "Eric Yang"
 date: "2022-10-09"
 output: html_document
 ---
-The code reads in the consoldiated plate reader data and
+The code reads in the consolidated plate reader data and
   1. Cleans up the data to display only three replicates for each construct
   2. Normalize YFP data for each construct by the YFP of the mTURQ control (background YFP) injected on the same leaf
   3. Performs a statistical test to see if each construct is significantly different from the mTURQ control
@@ -19,6 +19,17 @@ Output:
   3. ../Figures/SupplementalFigure4.svg
   4. ../../Pipeline/Data/Tobacco_Significance.csv (This is used to plot SupplementalFigure2)
 
+```{r}
+library(readxl)
+library(tidyverse)
+library(ggplot2)
+library(ggbeeswarm)
+library(confintr)
+library(showtext)
+library(svglite)
+```
+
+
 1. Cleaning up data by only including three replicates nearest the median of each experiment
 ```{r Cleanup}
 Final_df <- read.csv("../Dat/Final_df.csv")[,-1]
@@ -32,11 +43,11 @@ for (n in unique(Final_df$Experiment)){
   Output_df <- rbind(Output_df, Median_df)
 }
 
+
 #Drop the Null_YFP and add back in all of it
 Final_df2 <- Output_df %>% filter(!(Experiment == "Null_YFP"))
 Final_df2 <- rbind(Final_df2, Final_df %>% filter(Experiment == "Null_YFP"))
 ```
-
 2. Normalize YFP data by shifting down by median of mTURQ control per LEAF:
 ```{r}
 Final_df3 <- Final_df2 %>% filter(Signal == 'yfp')
@@ -116,7 +127,7 @@ Sig_output2 <- Sig_output %>% mutate(
   )
 )
 
-write.csv(Sig_output2, "../../Pipeline/Data/Tobacco_Significance.csv")
+#write.csv(Sig_output2, "../../Pipeline/Data/Tobacco_Significance.csv")
 ```
 
 For plotting we moved all the "ns" to the end
@@ -262,7 +273,7 @@ tall_plot <- ggplot() +
 
 library(patchwork)
 short_plot + tall_plot + plot_layout(widths = c(9,1))
-ggsave("../Figures/Figure2.svg", plot = last_plot(), width = 8.4, height = 4.2, units = "cm", dpi = 600, scale = 3)
+#ggsave("../Figures/Figure2.svg", plot = last_plot(), width = 8.4, height = 4.2, units = "cm", dpi = 600, scale = 3)
 ```
 
 Analyzing REPRESSION data:
@@ -494,7 +505,28 @@ ggplot() +
   scale_y_continuous(breaks = seq(0,3, by = 0.2))+
   ylab("Fold Change from Unrepressed Control")
 
-ggsave("../Figures/Figure4D.svg", plot = last_plot(), width = 8.4, height = 6, units = "cm", dpi = 600, scale = 3)
+#ggsave("../Figures/Figure4D.svg", plot = last_plot(), width = 8.4, height = 6, units = "cm", dpi = 600, scale = 3)
+```
+Calculate double-guide fold repression
+```{r}
+Avg_med <- Rep_Med_df %>% group_by(Experiment) %>% summarize(avg_med = mean(Median))
+#64550 Fold repression
+
+fold_rep <- function(Avg_med, mPromoter){
+  No_guide <- paste0(mPromoter, "+Input0,0")
+  Double_guide <- paste0(mPromoter, "+Input1,1")
+  print(paste("Promoter:", mPromoter))
+  return (Avg_med$avg_med[which(Avg_med$Experiment == No_guide)] / Avg_med$avg_med[which(Avg_med$Experiment == Double_guide)])
+}
+
+fold_rep(Avg_med, "AT1G64550(E,A)")
+fold_rep(Avg_med, "AT2G26780(A,B)")
+fold_rep(Avg_med, "AT2G29080(D,C)")
+fold_rep(Avg_med, "AT3G08530(r7,r5)")
+fold_rep(Avg_med, "AT3G18480(r3,r6)")
+fold_rep(Avg_med, "AT5G37830(B,E)")
+
+
 ```
 
 Regular plotting for supplement: 
@@ -684,5 +716,5 @@ Rep_plot(cur_set = unique(Repression5$Set)[1], vadjust = -1, firstplot = TRUE) +
   Rep_plot(cur_set = unique(Repression5$Set)[6], vadjust = -2, firstplot = FALSE) +
   plot_layout(ncol = 6)
 
-ggsave("../Figures/SupplementalFigure4.svg", plot = last_plot(), width = 8.4, height = 6, units = "cm", dpi = 600, scale = 3)
+#ggsave("../Figures/SupplementalFigure4.svg", plot = last_plot(), width = 8.4, height = 6, units = "cm", dpi = 600, scale = 3)
 ```
