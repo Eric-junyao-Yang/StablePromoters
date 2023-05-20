@@ -34,7 +34,7 @@ There are three sub-folders:
 
   Takes qPCR result from "/Dat" as input
   
-  Generates Figure3B in "/Figures"
+  Generates Figure3B and 3C in "/Figures"
 
 **Tobacco_Data** -
 
